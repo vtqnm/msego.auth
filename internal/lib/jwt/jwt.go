@@ -4,11 +4,12 @@ import (
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
+	"github.com/vtqnm/msego.auth/internal/config"
 )
 
-func GenerateToken(duration time.Duration) (string, error) {
+func GenerateToken() (string, error) {
 	claims := jwt.MapClaims{
-		"exp": time.Now().Add(duration).Unix(),
+		"exp": time.Now().Add(config.GetInstance().TokenTTL).Unix(),
 	}
 
 	token := jwt.NewWithClaims(jwt.SigningMethodRS256, claims)

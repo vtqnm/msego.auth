@@ -3,6 +3,7 @@ package config
 import (
 	"flag"
 	"os"
+	"sync"
 	"time"
 
 	"github.com/ilyakaznacheev/cleanenv"
@@ -26,6 +27,17 @@ type Config struct {
 type GRPCConfig struct {
 	Port    int           `yaml:"port"`
 	Timeout time.Duration `yaml:"timeout"`
+}
+
+var instance Config
+var once sync.Once
+
+func GetInstance() *Config {
+	once.Do(func() {
+		instance = *MustLoad()
+	})
+
+	return &instance
 }
 
 func MustLoad() *Config {

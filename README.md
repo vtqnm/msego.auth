@@ -1,1 +1,1 @@
-# msego.auth
+# msego.sso

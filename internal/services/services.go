@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"log/slog"
 
+	"github.com/vtqnm/msego.auth/internal/lib/jwt"
 	"github.com/vtqnm/msego.auth/internal/lib/logger/sl"
 	"github.com/vtqnm/msego.auth/internal/models"
 	"golang.org/x/crypto/bcrypt"
@@ -70,10 +71,20 @@ func (s *AuthService) Login(
 		s.log.Error("failed to get user", sl.Err(err))
 		return "", fmt.Errorf("%s %w", op, err)
 	}
+
+	log.Info("user logged is successfully")
+
+	token, err := jwt.GenerateToken()
+	if err != nil {
+		s.log.Error("failed to generate token", sl.Err(err))
+		return "", fmt.Errorf("%s %w", op, err)
+	}
+
+	return token, nil
 }
 
 func (s *AuthService) Register(
-	ctx context.Context,
+	ctx context.Context,	
 	email string,
 	password string,
 ) (uid int64, err error) {
